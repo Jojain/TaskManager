@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 import json
 import calendar 
+import datetime as dt
 
 def clear_layout(layout):
     while layout.count() > 0:
@@ -11,7 +12,15 @@ def clear_layout(layout):
         if w:
             w.deleteLater()
 
-
+def substract_time(begin_time,end_time):
+    """
+    Retourne l'interval de temps entre un temps d'entrée et de sortie
+    Prend deux objets time, et renvoie un nombre de minutes
+    """
+    beg = begin_time.hour * 60 + begin_time.minute
+    end = end_time.hour * 60 + end_time.minute
+    return end-beg    
+    
 def click_is_inside_widget(widget,event):
     """
     Fonction qui détermine si le click de souris est dans le widget ou non
