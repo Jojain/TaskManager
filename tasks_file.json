@@ -219,24 +219,6 @@
             "28": [
                 {
                     "details": "",
-                    "name": "era",
-                    "repetition": {
-                        "days": false,
-                        "months": false
-                    },
-                    "time": [
-                        [
-                            10,
-                            30
-                        ],
-                        [
-                            12,
-                            30
-                        ]
-                    ]
-                },
-                {
-                    "details": "",
                     "name": "2eme",
                     "repetition": {
                         "days": false,

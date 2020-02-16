@@ -132,12 +132,13 @@ class DayWidget(QtWidgets.QWidget):
         
         #Déclaration du button d'ajoute de tâche
         self.button_task = QtWidgets.QPushButton(self)
-        self.button_task.setIcon(QtGui.QIcon(r"D:\Projets_Python\Icones\batch-master\PNG\32x32\add"))
+        self.button_task.setIcon(QtGui.QIcon(r"icones\add.png"))
         self.button_task.resize(20,20)
         self.button_task.move(DayWidget._width-35,5)
         self.button_task.clicked.connect(self.open_task_window)
 
         self.delete_task_btn = QtWidgets.QPushButton(self)
+        self.delete_task_btn.setIcon(QtGui.QIcon(r"icones\remove.png"))
         self.delete_task_btn.resize(20,20)
         self.delete_task_btn.move(10,5)
         self.delete_task_btn.clicked.connect(self.open_delete_task_window)
@@ -381,10 +382,9 @@ class DetailedDayWidget(QtWidgets.QWidget):
     
     def update_foreground(self,day_clicked):
         #Update header
-        day_number = day_clicked.nb
-        self.update_header(day_number)
-        tasks = day_clicked.tasks  
-
+        
+        self.update_header(day_clicked)
+        tasks = day_clicked.tasks          
         if day_clicked != self.current_day_widget_displayed:
             for task_displayed in self.tasks_labels:
                 task_displayed.deleteLater()
@@ -415,14 +415,14 @@ class DetailedDayWidget(QtWidgets.QWidget):
 
             label.move(self.hour_x_offset,self.starting_height + (b_time.hour - 7) * self.hour_spacing + b_time.minute * minute_spacing)
             label.show()
-            # x_pos = self.x_offset
+            
 
         self.current_day_widget_displayed = day_clicked
 
 
-    def update_header(self, day_number):
-        
-        day_to_display = f"{self.days[self.day]}  {day_number}"
+    def update_header(self, day_clicked):
+        day_number = day_clicked.nb
+        day_to_display = f"{self.days[day_clicked.col-1]}  {day_number}"
         self.header.setText(day_to_display)
 
     def setup_header(self):
@@ -434,7 +434,7 @@ class DetailedDayWidget(QtWidgets.QWidget):
         day_to_display = f"{self.days[self.day]}  {str(self.tab_calendar_widget.current_month.current_day_widget.nb)}"    
         self.header.setText(day_to_display)
         self.header.setAlignment(QtCore.Qt.AlignCenter)
-        self.header.setStyleSheet(' color : red ; font-size : 28px; font-family: "Haettenschweiler"')
+        self.header.setStyleSheet(' color : navy ; font-size : 28px; font-family: "Haettenschweiler"')
         self.header.resize(DetailedDayWidget.TASK_WIDTH - self.pen_width*4 ,self.starting_height)        
 
 
