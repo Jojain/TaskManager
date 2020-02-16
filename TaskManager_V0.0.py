@@ -424,42 +424,43 @@ class DetailedDayWidget(QtWidgets.QWidget):
         hour_x_offset = 50        
         task_background_height = 0.9 * height
        
-        hour_spacing = task_background_height / DetailedDayWidget.HOURS_DISPLAYED - 1
-        self.hour_spacing = hour_spacing
         
+
         painter.drawRoundedRect(x_offset,y_offset,width,height,15,15)
         painter.drawLine(x_offset,0.1* height, width + x_offset, 0.1* height)
 
         #Découpage de l'espace des tâches en nombre d'heure spécifique
-        for i in range(DetailedDayWidget.HOURS_DISPLAYED):
-            starting_height =  height-task_background_height
-            current_height = starting_height + i*hour_spacing
-            h = 7+i
-            hour = f"{h}h00"
-            
+        hour_spacing = task_background_height / (DetailedDayWidget.HOURS_DISPLAYED - 1)   
+        self.hour_spacing = hour_spacing   # On sauvegarde la valeur du hour spacing pour pouvoir savoir ou positionner les tâches du DayWidget
+        starting_height =  height-task_background_height
+        self.starting_height = starting_height # Même chose que pour l'hour spacing
+        current_hour_height = starting_height
+        current_half_hour_height = starting_height
 
-            if i == 0 :              
+        #Tracé des pointillés demi-heures
+        for i in range(1,(DetailedDayWidget.HOURS_DISPLAYED)*2-1):
+            current_half_hour_height += hour_spacing/2
+            if i%2 != 0 : # On ne trace qu'une ligne sur deux pour ne pas tracer de pointillés sur le traits des heures               
                 pen.setWidth(1)
                 pen.setStyle(QtCore.Qt.DotLine)
                 painter.setPen(pen)
+                painter.drawLine(x_offset + hour_x_offset, current_half_hour_height, width - x_offset , current_half_hour_height)
 
-                painter.drawLine(x_offset + hour_x_offset, current_height + hour_spacing/2, width + x_offset , current_height + hour_spacing/2)
-                pen.setStyle(QtCore.Qt.SolidLine)                
-                painter.setPen(pen)            
+        #Tracé des traits heures et textes heures
+        for i in range(1,DetailedDayWidget.HOURS_DISPLAYED-1):
+            current_hour_height += hour_spacing
+            h = 24 - DetailedDayWidget.HOURS_DISPLAYED+1 + i
+            hour = f"{h}h00"
 
-            else:
-                location = QtCore.QPointF(hour_x_offset/2, current_height-1)
-                text_rect = QtCore.QRectF(0,0,hour_x_offset,10)                
-                text_rect.moveCenter(location)
-
-                painter.drawText(text_rect, QtCore.Qt.AlignCenter, hour )
-                painter.drawLine(x_offset + hour_x_offset, current_height, width + x_offset , current_height)                
-                pen.setStyle(QtCore.Qt.DotLine)
-                painter.setPen(pen)
-                painter.drawLine(x_offset + hour_x_offset, current_height + hour_spacing/2, width + x_offset , current_height + hour_spacing/2)
-                pen.setStyle(QtCore.Qt.SolidLine)
-                painter.setPen(pen)
-                
+            pen.setStyle(QtCore.Qt.SolidLine)                
+            painter.setPen(pen) 
+            location = QtCore.QPointF(hour_x_offset/2, current_hour_height-1)
+            text_rect = QtCore.QRectF(0,0,hour_x_offset,10)                
+            text_rect.moveCenter(location)
+            painter.drawText(text_rect, QtCore.Qt.AlignCenter, hour)
+            painter.drawLine(x_offset + hour_x_offset, current_hour_height, width + x_offset , current_hour_height)  
+            
+            
 
 
         painter.end()        
