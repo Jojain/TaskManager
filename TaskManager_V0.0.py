@@ -4,7 +4,7 @@ import calendar
 import datetime as dt 
 import itertools
 import json
-from global_functions import clear_layout, click_is_inside_widget
+from global_functions import clear_layout, click_is_inside_widget, substract_time
 from popup_windows import TaskWindow, DeleteTaskWindow
 
 class DayWidget(QtWidgets.QWidget):
@@ -346,7 +346,7 @@ class TabMonths(QtWidgets.QTabWidget):
         today = dt.date.today()
         self.setCurrentIndex(today.month-1)
         self.current_month = self.currentWidget()
-
+        
      
 
 class DetailedDayWidget(QtWidgets.QWidget):
@@ -371,18 +371,54 @@ class DetailedDayWidget(QtWidgets.QWidget):
         self.tab_calendar_widget = args[1]
         self.tasks = self.tab_calendar_widget.current_month.current_day_widget.tasks        
         self.day = self.tab_calendar_widget.current_month.day_position
+        self.current_day_widget_displayed = self.tab_calendar_widget.current_month.current_day_widget
         
-
         self.setup_backgroup()        
         self.setup_header()
+        self.tasks_labels = []  
         # self.update_foreground()
 
-
+    
     def update_foreground(self,day_clicked):
-        
+        #Update header
         day_number = day_clicked.nb
         self.update_header(day_number)
-    
+        tasks = day_clicked.tasks  
+
+        if day_clicked != self.current_day_widget_displayed:
+            for task_displayed in self.tasks_labels:
+                task_displayed.deleteLater()
+
+            self.tasks_labels = []  
+        
+        for task in tasks :
+            label =  QtWidgets.QLabel(self.background) #Si ca bug (s'affiche pas) mettre self.label ici   
+            self.tasks_labels.append(label)         
+            style_sheet = "background-color : blue; border : 1px solid black; border-radius : 8px"
+            label.setStyleSheet(style_sheet)                
+           
+            title = task["name"]
+            details = task["details"]
+            text = f'<font color = "white" ><b><center>{title}</center></b></font-color><br><center>{details}</center>'
+            label.setText(text)            
+            minute_spacing = self.hour_spacing/60
+            
+            b_time = dt.time(*task["time"][0])
+            e_time = dt.time(*task["time"][1])
+           
+            task_length = substract_time(b_time, e_time)
+            label_height = minute_spacing * task_length
+            x = self.background.width() - self.hour_x_offset - 4*self.pen_width
+            label.resize(x-3,label_height)
+
+            
+
+            label.move(self.hour_x_offset,self.starting_height + (b_time.hour - 7) * self.hour_spacing + b_time.minute * minute_spacing)
+            label.show()
+            # x_pos = self.x_offset
+
+        self.current_day_widget_displayed = day_clicked
+
 
     def update_header(self, day_number):
         
@@ -397,8 +433,10 @@ class DetailedDayWidget(QtWidgets.QWidget):
         self.header = QtWidgets.QLabel(self.background)
         day_to_display = f"{self.days[self.day]}  {str(self.tab_calendar_widget.current_month.current_day_widget.nb)}"    
         self.header.setText(day_to_display)
-        self.header.setStyleSheet('color : red ; font-size : 28px; font-family: "Haettenschweiler"')
-        self.header.move(165,150)
+        self.header.setAlignment(QtCore.Qt.AlignCenter)
+        self.header.setStyleSheet(' color : red ; font-size : 28px; font-family: "Haettenschweiler"')
+        self.header.resize(DetailedDayWidget.TASK_WIDTH - self.pen_width*4 ,self.starting_height)        
+
 
 
     def setup_backgroup(self):
@@ -408,7 +446,8 @@ class DetailedDayWidget(QtWidgets.QWidget):
         """
 
         #Initialisation des variables
-        self.background = QtWidgets.QLabel(self)               
+        self.background = QtWidgets.QLabel(self)  
+        self.background.setFixedSize(DetailedDayWidget.TASK_WIDTH,DetailedDayWidget.TASK_HEIGHT)               
         canvas = QtGui.QPixmap(DetailedDayWidget.TASK_WIDTH,DetailedDayWidget.TASK_HEIGHT)      #Changer la taille de canvas pour agrandir le widget
         canvas.fill(QtCore.Qt.GlobalColor.transparent)
         painter = QtGui.QPainter(canvas)
@@ -420,10 +459,13 @@ class DetailedDayWidget(QtWidgets.QWidget):
         width = 400
         height = 700
         x_offset = pen.width()/2
+        
         y_offset = pen.width()/2
-        hour_x_offset = 50        
-        task_background_height = 0.9 * height
-       
+        hour_x_offset = 50  
+        self.hour_x_offset = hour_x_offset
+
+        task_background_height = 0.9 * height        
+        self.x_offset = x_offset + hour_x_offset
         
 
         painter.drawRoundedRect(x_offset,y_offset,width,height,15,15)

@@ -41,11 +41,26 @@ class mw(QtWidgets.QMainWindow):
         painter.end()        
         self.background.setPixmap(canvas)
         self.global_layout.addWidget(self.background)
-        
+
+def substract_time(begin_time,end_time):
+    """
+    Retourne l'interval de temps entre un temps d'entrée et de sortie
+    Prend deux objets time, et renvoie un nombre de minutes
+    """
+    beg = begin_time.hour * 60 + begin_time.minute
+    end = end_time.hour * 60 + end_time.minute
+    return end-beg
+
+
+
         
 if __name__ == '__main__':
-    application = QtWidgets.QApplication(sys.argv)
-    main_window = mw()
-    main_window.show()
-    sys.exit(application.exec_())
+    # application = QtWidgets.QApplication(sys.argv)
+    # main_window = mw()
+    # main_window.show()
+    # sys.exit(application.exec_())
+    import datetime as dt 
+    a = dt.time(16,36)
+    b = dt.time(19,10)
+    print(substract_time(a,b))
 
