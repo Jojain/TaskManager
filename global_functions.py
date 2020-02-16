@@ -44,14 +44,12 @@ def create_json_file():
     days = { i : [] for i in range(1,7*6+1)}
     months = {m : days for m in range(1,13)}
     years = {y : months for y in range(2020,2021)}
-    # years_json = json.dumps(years)
-    print(len(years))
     with open("tasks_file.json","w") as json_file:    
         json.dump(years,json_file, indent= 4, sort_keys= True)
         
     
 
-    # print(months)
+    
 
 if __name__ == "__main__" :
     create_json_file()

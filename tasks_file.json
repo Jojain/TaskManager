@@ -194,10 +194,66 @@
             "22": [],
             "23": [],
             "24": [],
-            "25": [],
+            "25": [
+                {
+                    "details": "",
+                    "name": "OUI",
+                    "repetition": {
+                        "days": false,
+                        "months": false
+                    },
+                    "time": [
+                        [
+                            19,
+                            0
+                        ],
+                        [
+                            19,
+                            36
+                        ]
+                    ]
+                }
+            ],
             "26": [],
             "27": [],
-            "28": [],
+            "28": [
+                {
+                    "details": "",
+                    "name": "era",
+                    "repetition": {
+                        "days": false,
+                        "months": false
+                    },
+                    "time": [
+                        [
+                            10,
+                            30
+                        ],
+                        [
+                            12,
+                            30
+                        ]
+                    ]
+                },
+                {
+                    "details": "",
+                    "name": "2eme",
+                    "repetition": {
+                        "days": false,
+                        "months": false
+                    },
+                    "time": [
+                        [
+                            22,
+                            0
+                        ],
+                        [
+                            23,
+                            59
+                        ]
+                    ]
+                }
+            ],
             "29": [],
             "3": [],
             "30": [],
