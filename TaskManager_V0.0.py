@@ -530,7 +530,8 @@ class TaskMasterMainWindow(QtWidgets.QMainWindow):
             month = calendar.widget(i)
             list_of_day_widget = list(itertools.chain.from_iterable(month.grid))
             for day_widget in list_of_day_widget:
-                day_widget.day_clicked.connect(lambda d = day_widget: detailed_day.update_foreground(d))
+                #On veux quand quand un day_widget soit cliqué le detailed_day foreground de ce widget spécifique soit updaté.
+                day_widget.day_clicked.connect(lambda d = day_widget: detailed_day.update_foreground(d)) 
 
         self.setCentralWidget(central_widget)        
 
